@@ -46,14 +46,6 @@ else:
         break
 
 
-example = {}
-counter = 0
-for i in range(11):
-    example[i] = counter
-    counter += 100 * (2 ** - i)
-
-print(example)
-
 def function_to_values(function):
     pass
 
@@ -163,6 +155,8 @@ def df_to_list(dataf):
     for elem in dataf[0]:
         new.append(elem)
 
+    print("decile points:", new)
+
     return new
 
 def create_curve():
@@ -195,7 +189,7 @@ def create_curve():
             bin_value = random.uniform(0, max_value)
 
         cumulative_value += bin_value
-        print(current_bin, bin_value, cumulative_value)
+        # print(current_bin, bin_value, cumulative_value)
         if (cumulative_value > 1):
             cumulative_value = 1
         df[0][current_bin] = cumulative_value
@@ -212,6 +206,8 @@ example_list = [0, 300, 500, 700, 850, 900, 920, 940, 970, 990, 1000]   # Dummy 
 example_list = df_to_list(create_curve())
 
 
+# Change plot size (useful for jupyter notebook)
+plt.rcParams['figure.figsize'] = [3, 3]
 
 # Regular plot
 ax = plt.subplot(221)
