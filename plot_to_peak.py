@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 import random
-
+import scipy
 
 max_threshold = 0.9
 lift_threshold = 0.05
@@ -177,11 +177,15 @@ example_list = [0, 300, 500, 700, 850, 900, 920, 940, 970, 990, 1000]
 example_list = df_to_list(barlow_code())
 
 
-plt.subplot(221)
+ax = plt.subplot(221)
+ax.set_yticks(scipy.arange(0, 1.1, 0.1))
+ax.set_xticks(scipy.arange(0, 11, 1))
 plt.plot(x, example_list)
 plt.grid(True)
 
-plt.subplot(222)
+ax = plt.subplot(222)
+ax.set_yticks(scipy.arange(0, 1.1, 0.1))
+ax.set_xticks(scipy.arange(0, 11, 1))
 plt.plot(x, example_list)
 plt.grid(True)
 draw_horizontal_line(example_list, max_threshold)
@@ -192,7 +196,9 @@ plt.annotate('percentage peak',
              arrowprops=dict(facecolor='black', shrink=0.05),
              )
 
-plt.subplot(223)
+ax = plt.subplot(223)
+ax.set_yticks(scipy.arange(0, 1.1, 0.1))
+ax.set_xticks(scipy.arange(0, 11, 1))
 plt.plot(x, example_list)
 plt.grid(True)
 lift_max = peak_for_lift(example_list, lift_threshold)
@@ -208,7 +214,9 @@ plt.annotate('last lift',
              arrowprops=dict(facecolor='black', shrink=0.015),
              )
 
-plt.subplot(224)
+ax = plt.subplot(224)
+ax.set_yticks(scipy.arange(0, 1.1, 0.1))
+ax.set_xticks(scipy.arange(0, 11, 1))
 plt.plot(x, example_list)
 plt.grid(True)
 plt.annotate('best per decile = ' + str(percentage_max),
