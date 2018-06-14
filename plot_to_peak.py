@@ -1,21 +1,60 @@
 import matplotlib.pyplot as plt
-import random
 import scipy
+import numpy as np
+import pandas as pd
+import random
 
-max_threshold = 0.9
-lift_threshold = 0.05
+def input_true_or_false(string):
+    yes = {'yes','y', 'Yes', 'Y', 'Yes.', 'yes.'}
+    no = {'no', 'n', 'No', 'N', 'No.', 'no.'}
+
+    if choice in yes:
+        DEFAULT = True
+    elif choice in no:
+        DEFAULT = False
+    else:
+        DEFAULT = True
+
+    return DEFAULT
+
+
+choice = input("Use default values? Answer with yes (y) or no (n). \n "
+               "(Percentage threshold = 90%, lift threshold = 5%, grids = on)\n")
+
+DEFAULT = input_true_or_false(choice)
+
+if DEFAULT:
+    MAX_THRESHOLD = 0.9
+    LIFT_THRESHOLD = 0.05
+    GRID_OR_NO = True
+else:
+    while (True):
+        try:
+            MAX_THRESHOLD = float(input("Percentage threshold? Answer with percentage from 0 to 100.\n")) / 100
+        except:
+            print("Please respond with a number between 0 and 100.\n")
+            continue
+
+        try:
+            LIFT_THRESHOLD = float(input("Lift threshold? Answer with percentage from 0 to 100.\n")) / 100
+        except:
+            print("Please respond with a number between 0 and 100.\n")
+            continue
+
+        GRID_OR_NO = input_true_or_false(input("Grids?\n"))
+
+        break
 
 
 example = {}
 counter = 0
 for i in range(11):
     example[i] = counter
-    # counter += random.randint(0, 100) * (1 - 2 ** - i)
     counter += 100 * (2 ** - i)
 
 print(example)
 
-def function_to_y(function):
+def function_to_values(function):
     pass
 
 def dict_to_tuples(d):
@@ -64,7 +103,6 @@ def peak_for_lift(decile, lift):
 
 def peak_for_max_threshold(decile, thresh_per):
     """
-
     :param decile: (list/dict) ex: [0, 5, 89, 104, 188, 249, 277, 300, 341, 432, 479]
     :param thresh_per:
     :return: the decile in which you should stop for this peak
@@ -127,11 +165,7 @@ def df_to_list(dataf):
 
     return new
 
-def barlow_code():
-    import numpy as np
-    import pandas as pd
-    import random
-
+def create_curve():
     # number of bins
     NUM_PERCENTILES = 10
 
@@ -171,38 +205,43 @@ def barlow_code():
 
     return df
 
+
 x = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-example_list = [0, 300, 500, 700, 850, 900, 920, 940, 970, 990, 1000]
+example_list = [0, 300, 500, 700, 850, 900, 920, 940, 970, 990, 1000]   # Dummy example
 
-example_list = df_to_list(barlow_code())
+example_list = df_to_list(create_curve())
 
 
+
+# Regular plot
 ax = plt.subplot(221)
 ax.set_yticks(scipy.arange(0, 1.1, 0.1))
 ax.set_xticks(scipy.arange(0, 11, 1))
 plt.plot(x, example_list)
-plt.grid(True)
+plt.grid(GRID_OR_NO)
 
+# Plot showing percentage threshold
 ax = plt.subplot(222)
 ax.set_yticks(scipy.arange(0, 1.1, 0.1))
 ax.set_xticks(scipy.arange(0, 11, 1))
 plt.plot(x, example_list)
-plt.grid(True)
-draw_horizontal_line(example_list, max_threshold)
-percentage_max = peak_for_max_threshold(example_list, max_threshold)
+plt.grid(GRID_OR_NO)
+draw_horizontal_line(example_list, MAX_THRESHOLD)
+percentage_max = peak_for_max_threshold(example_list, MAX_THRESHOLD)
 plt.annotate('percentage peak',
              xy=(percentage_max, (example_list[percentage_max])),
              xytext=(3, 0),
              arrowprops=dict(facecolor='black', shrink=0.05),
              )
 
+# Plot showing lift thresholds
 ax = plt.subplot(223)
 ax.set_yticks(scipy.arange(0, 1.1, 0.1))
 ax.set_xticks(scipy.arange(0, 11, 1))
 plt.plot(x, example_list)
-plt.grid(True)
-lift_max = peak_for_lift(example_list, lift_threshold)
-lift_last_max = peak_for_last_lift(example_list, lift_threshold)
+plt.grid(GRID_OR_NO)
+lift_max = peak_for_lift(example_list, LIFT_THRESHOLD)
+lift_last_max = peak_for_last_lift(example_list, LIFT_THRESHOLD)
 plt.annotate('first lift',
              xy=(lift_max - 0.5, (example_list[lift_max] + example_list[lift_max - 1]) / 2),
              xytext=(3, 0),
@@ -214,11 +253,12 @@ plt.annotate('last lift',
              arrowprops=dict(facecolor='black', shrink=0.015),
              )
 
+# Plot with annotations stating best deciles to use
 ax = plt.subplot(224)
 ax.set_yticks(scipy.arange(0, 1.1, 0.1))
 ax.set_xticks(scipy.arange(0, 11, 1))
 plt.plot(x, example_list)
-plt.grid(True)
+plt.grid(GRID_OR_NO)
 plt.annotate('best per decile = ' + str(percentage_max),
              xy=(lift_max - 0.5, (example_list[lift_max] + example_list[lift_max - 1]) / 2),
              xytext=(5, 0),
@@ -231,6 +271,8 @@ plt.annotate('best last lift decile = ' + str(lift_last_max),
              xy=(lift_max - 0.5, (example_list[lift_max] + example_list[lift_max - 1]) / 2),
              xytext=(5, .3),
              )
+
+
 
 
 plt.show()
