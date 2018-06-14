@@ -176,16 +176,25 @@ example_list = [0, 300, 500, 700, 850, 900, 920, 940, 970, 990, 1000]
 
 example_list = df_to_list(barlow_code())
 
+
 plt.subplot(221)
 plt.plot(x, example_list)
+plt.grid(True)
 
 plt.subplot(222)
 plt.plot(x, example_list)
+plt.grid(True)
 draw_horizontal_line(example_list, max_threshold)
 percentage_max = peak_for_max_threshold(example_list, max_threshold)
+plt.annotate('percentage peak',
+             xy=(percentage_max, (example_list[percentage_max])),
+             xytext=(3, 0),
+             arrowprops=dict(facecolor='black', shrink=0.05),
+             )
 
 plt.subplot(223)
 plt.plot(x, example_list)
+plt.grid(True)
 lift_max = peak_for_lift(example_list, lift_threshold)
 lift_last_max = peak_for_last_lift(example_list, lift_threshold)
 plt.annotate('first lift',
@@ -201,6 +210,7 @@ plt.annotate('last lift',
 
 plt.subplot(224)
 plt.plot(x, example_list)
+plt.grid(True)
 plt.annotate('best per decile = ' + str(percentage_max),
              xy=(lift_max - 0.5, (example_list[lift_max] + example_list[lift_max - 1]) / 2),
              xytext=(5, 0),
