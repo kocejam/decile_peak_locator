@@ -123,7 +123,7 @@ def df_to_list(dataf):
     new = []
 
     for elem in dataf[0]:
-        new.append(elem * 100)
+        new.append(elem)
 
     return new
 
@@ -190,12 +190,12 @@ lift_max = peak_for_lift(example_list, lift_threshold)
 lift_last_max = peak_for_last_lift(example_list, lift_threshold)
 plt.annotate('first lift',
              xy=(lift_max - 0.5, (example_list[lift_max] + example_list[lift_max - 1]) / 2),
-             xytext=(3, 1.5),
+             xytext=(3, 0),
              arrowprops=dict(facecolor='black', shrink=0.05),
              )
 plt.annotate('last lift',
              xy=(lift_last_max - 0.5, (example_list[lift_last_max] + example_list[lift_last_max - 1]) / 2),
-             xytext=(6, 20),
+             xytext=(6, .15),
              arrowprops=dict(facecolor='black', shrink=0.015),
              )
 
@@ -203,15 +203,15 @@ plt.subplot(224)
 plt.plot(x, example_list)
 plt.annotate('best per decile = ' + str(percentage_max),
              xy=(lift_max - 0.5, (example_list[lift_max] + example_list[lift_max - 1]) / 2),
-             xytext=(5, 1.5),
+             xytext=(5, 0),
              )
 plt.annotate('best first lift decile = ' + str(lift_max),
              xy=(lift_max - 0.5, (example_list[lift_max] + example_list[lift_max - 1]) / 2),
-             xytext=(5, 15),
+             xytext=(5, .15),
              )
 plt.annotate('best last lift decile = ' + str(lift_last_max),
              xy=(lift_max - 0.5, (example_list[lift_max] + example_list[lift_max - 1]) / 2),
-             xytext=(5, 30),
+             xytext=(5, .3),
              )
 
 
